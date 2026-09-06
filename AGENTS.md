@@ -16,6 +16,18 @@ Stdio MCP server (opencode-spawned) driving mBot2/CyberPi over serial. One line 
 - **Never suggest Arduino flashing for the CyberPi** — it wipes CyberOS. The bridge is a MicroPython `main.py` upload, which coexists with CyberOS.
 - **The `0xFF 0x55` frame protocol is mBot v1, not mBot2.** Do not implement it here; this repo's protocol is the plain-text lines in `02-bridge-upload.md`.
 - **No test suite exists.** Verify with the two commands below, not pytest.
+- **`cyberpi/mbot2_bridge.py`'s entry point must stay registered via
+  `@event.start` (from `import event`), never a bare
+  `if __name__ == "__main__"` block.** Confirmed 2026-09-06: a
+  non-`@event.start` entry point boots the CyberPi to the Makeblock logo
+  then hangs/goes dark, requiring a firmware reinstall — reproduced twice,
+  with unrelated code (the full bridge script and a trivial one-liner),
+  independent of what the code does. Device APIs must also stay top-level
+  imports (`import mbot2`, `import mbuild`), not `cyberpi.mbot2` /
+  `cyberpi.ultrasonic2` attribute access — see
+  `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md` for the full
+  incident. Re-test any structural change with a small marker-bearing
+  snippet before trusting the full bridge again.
 
 ## Commands
 

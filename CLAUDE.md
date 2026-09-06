@@ -95,6 +95,15 @@ python scripts/list_ports.py
   implement it here; this repo's protocol is the plain-text lines defined in
   `cyberpi/mbot2_bridge.py` and `docs/02-bridge-upload.md`.
 - **No test suite exists.** Verify with the two commands above, not pytest.
+- **`cyberpi/mbot2_bridge.py`'s entry point must stay registered via
+  `@event.start` (from `import event`), never a bare
+  `if __name__ == "__main__"` block.** Confirmed 2026-09-06: a
+  non-`@event.start` entry point boots the CyberPi to the Makeblock logo
+  then hangs/goes dark, requiring a firmware reinstall — reproduced twice
+  with unrelated code, independent of what the code does. Device APIs must
+  also stay top-level imports (`import mbot2`, `import mbuild`), not
+  `cyberpi.mbot2` attribute access — see
+  `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md`.
 
 ## Serial gotchas (details in `docs/04-troubleshooting.md`)
 
