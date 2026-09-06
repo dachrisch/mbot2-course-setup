@@ -61,6 +61,7 @@ def _end_text():
     cyberpi.led.off(id='all')
     cyberpi.display.clear()
     cyberpi.display.show_label("Welcome to class!", 16, 0, 20, 0)
+    cyberpi.audio.play_until("magic")
 
 
 @event.start
