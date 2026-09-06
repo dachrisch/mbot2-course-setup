@@ -13,9 +13,14 @@ on-device.
 - `docs/05-cyberpi-mbot2-api-reference.md` — confirmed `cyberpi`/`mbot2`/
   `mbuild` API calls (LED, audio, display, movement, sensors); consult
   before guessing a signature.
-- `docs/01-linux-setup.md`, `docs/04-troubleshooting.md` — mLink/USB setup
-  and a connection-failure log; still accurate, consult before
-  re-diagnosing.
+- `docs/01-linux-setup.md` — mLink/USB setup; still accurate, consult
+  before re-diagnosing.
+- `docs/04-troubleshooting.md` — connection/upload failure log; the
+  mLink/dialout/USB connectivity rows are still accurate, but several rows
+  (the `PING`/bridge-upload row, the `ModuleNotFoundError: mcp...`/
+  `mbot2_mcp` rows, the motor-polarity `DRIVE`-handler row, and the sensor
+  `index=2` row) and the raw-port diagnosis snippet at the bottom are
+  written for the now-deleted MCP/bridge package — ignore those.
 - `docs/02-bridge-upload.md`, `docs/03-opencode-mcp.md` — written for the
   now-deleted PC-side bridge/MCP server; stale in places (rewriting them is
   out of scope here — see README), but `02`'s connect/Upload-mode steps
