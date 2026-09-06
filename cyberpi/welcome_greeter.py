@@ -19,6 +19,9 @@ def _speak_greet():
     cyberpi.audio.set_vol(100)
     cyberpi.display.show_label("Hello!", 24, 0, 20, 0)
     cyberpi.audio.play_until("hello")
+    # fanfare: C4 E4 G4 C5 (confirmed play_tone signature: freq_hz, seconds)
+    for freq in (262, 330, 392, 523):
+        cyberpi.audio.play_tone(freq, 0.2)
 
 
 def _dance():
@@ -33,7 +36,25 @@ def _dance():
             cyberpi.led.on(color[0], color[1], color[2], id='all')
             cyberpi.audio.play_drum(drum, 0.3)
             move()
+
+    # drive in a circle: no confirmed arc-drive primitive, so approximate
+    # with short forward+turn steps (8 x 45 degrees = one loop)
+    cyberpi.led.on(0, 255, 0, id='all')
+    for _ in range(8):
+        mbot2.forward(40, 0.2)
+        mbot2.turn(45)
+
+    # spin around
+    cyberpi.led.play(name="meteor_blue")
+    mbot2.turn(360)
+
     cyberpi.led.play(name="rainbow")
+
+
+def _clap_finale():
+    cyberpi.led.on(255, 255, 255, id='all')
+    for _ in range(4):
+        cyberpi.audio.play_drum("hand-clap", 0.3)
 
 
 def _end_text():
@@ -46,4 +67,5 @@ def _end_text():
 def on_start():
     _speak_greet()
     _dance()
+    _clap_finale()
     _end_text()
