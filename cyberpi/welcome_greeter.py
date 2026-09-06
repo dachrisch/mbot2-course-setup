@@ -21,6 +21,22 @@ def _speak_greet():
     cyberpi.audio.play_until("hello")
 
 
+def _dance():
+    moves = [
+        (lambda: mbot2.turn(90), (0, 255, 0), "snare"),
+        (lambda: mbot2.turn(-90), (255, 0, 255), "tambourine"),
+        (lambda: mbot2.forward(40, 0.4), (0, 255, 255), "side-stick"),
+        (lambda: mbot2.backward(40, 0.4), (255, 255, 0), "hand-clap"),
+    ]
+    for _ in range(2):
+        for move, color, drum in moves:
+            cyberpi.led.on(color[0], color[1], color[2], id='all')
+            cyberpi.audio.play_drum(drum, 0.3)
+            move()
+    cyberpi.led.play(name="rainbow")
+
+
 @event.start
 def on_start():
     _speak_greet()
+    _dance()
