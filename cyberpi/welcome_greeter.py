@@ -36,7 +36,14 @@ def _dance():
     cyberpi.led.play(name="rainbow")
 
 
+def _end_text():
+    cyberpi.led.off(id='all')
+    cyberpi.display.clear()
+    cyberpi.display.show_label("Welcome to class!", 16, 0, 20, 0)
+
+
 @event.start
 def on_start():
     _speak_greet()
     _dance()
+    _end_text()
