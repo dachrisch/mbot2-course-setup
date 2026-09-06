@@ -25,8 +25,9 @@ on-device.
   now-deleted PC-side bridge/MCP server; stale in places (rewriting them is
   out of scope here — see README), but `02`'s connect/Upload-mode steps
   still apply to uploading any `.py` file, including this one.
-- `.claude/skills/upload-cyberpi/SKILL.md` — browser-automation procedure
-  for uploading through the mBlock web IDE.
+- `.claude/skills/upload-cyberpi/SKILL.md` (Claude) /
+  `.opencode/skills/upload-cyberpi/SKILL.md` (opencode, chrome-devtools) —
+  browser-automation procedure for uploading through the mBlock web IDE.
 - `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md` — the incident
   behind the `@event.start` constraint below.
 
@@ -61,7 +62,8 @@ wc -c cyberpi/welcome_greeter.py   # byte length; sanity-check the editor matche
 ```
 
 Upload and verify via the `upload-cyberpi` skill
-(`.claude/skills/upload-cyberpi/SKILL.md`, or
+(`.claude/skills/upload-cyberpi/SKILL.md` on Claude, or
+`.opencode/skills/upload-cyberpi/SKILL.md` on opencode, or
 `/upload-cyberpi cyberpi/welcome_greeter.py`) — it drives the mBlock web
 IDE, checks the editor content byte-for-byte against the local file before
 uploading, and ends by asking the user to physically confirm the board's
