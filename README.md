@@ -55,6 +55,14 @@ hangs) — see `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md`.
   `mbuild` API calls (LED, audio, display, movement, sensors), sourced
   from a community MicroPython example set; use this instead of guessing
   signatures
+- `docs/06-usb-upload-protocol.md` — the mBlock USB upload framing
+  (`F3`/`F4`, checksum, sequence), decoded 2026-09-08; backing
+  `scripts/mbot_upload.py`, which uploads any `size % 80 == 4` file over
+  raw serial with no browser/mLink:
+  `sg dialout -c "python3 scripts/mbot_upload.py cyberpi/<file>.py"`
+- `history/2026-09-08_browser-free-upload.md` — how the direct
+  programming path was re-iterated (USB stdin dead, UART alive,
+  framing cracked, red LED + hi/cheers demos)
 
 ## USB vs. Bluetooth
 
