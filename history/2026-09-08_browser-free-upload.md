@@ -113,9 +113,19 @@ sg dialout -c "python3 scripts/mbot_upload.py cyberpi/<file>.py --expect <MARKER
 wc -c cyberpi/<file>.py   # must satisfy size % 80 == 4 (pad to fit)
 ```
 
+## Addendum — greeter via auto-pad (same night)
+
+- Uploader now pads in memory with trailing newlines to `% 80 == 4`
+  (file on disk untouched) — earlier manual comment-padding of
+  `red_test.py`/`hi_cheer.py` no longer needed for new files.
+- `welcome_greeter.py` (2204→2244 B on the wire, 28 frames + final):
+  all acked first try, full greeting performed, physically confirmed.
+  Greeter prints nothing, so confirmation was the performance itself
+  (cyan + "Hello!" + fanfare → dance → claps → "Welcome to class!").
+
 ## Standing notes
 
-- `@event.start` held through 6 uploads tonight (3 browser, 3 serial).
+- `@event.start` held through 8 full uploads tonight (4 browser, 4 serial).
   Never upload bare-entry-point code; never Arduino-flash (wipes CyberOS).
 - Never touch the mlink daemon during browser work; close the IDE tab
   before raw-serial use (port contention).

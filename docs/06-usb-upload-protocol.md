@@ -103,9 +103,11 @@ content, hi + cheers confirmed) — all `% 80 == 4` by construction
 ## Tool
 
 `scripts/mbot_upload.py cyberpi/<file>.py [--expect MARKER]` — usage in
-its docstring. Hard requirement: file size `% 80 == 4` (pad with trailing
-comments); the uploader asserts nothing, the board just goes silent on
-other shapes. Needs exclusive port access (close any mBlock tab first)
-and `dialout` (`sg dialout -c ...` if needed). After a successful upload,
-if no marker appears within ~20 s, power-cycle the board before assuming
-failure.
+its docstring. The uploader auto-pads with trailing newlines (semantically
+null) so `size % 80 == 4` on the wire; the file on disk is untouched.
+Proven: `uart_probe2.py` (1924 B), `red_test.py` (804 B, red LED),
+`hi_cheer.py` (1044 B, hi + cheers), `welcome_greeter.py` (2204→2244 B,
+full greeting performed) — all physically confirmed.
+Needs exclusive port access (close any mBlock tab first) and `dialout`
+(`sg dialout -c ...` if needed). After a successful upload, if no marker
+appears within ~20 s, power-cycle the board before assuming failure.

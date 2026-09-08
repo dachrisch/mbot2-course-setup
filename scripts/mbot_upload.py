@@ -32,8 +32,13 @@ Board stdout (prints, REPL banner, reboot chatter) interleaves on the
 same wire as plain text; the reader skips non-F3 bytes when framing.
 
 Usage:
-    python3 scripts/mbot_upload.py cyberpi/uart_probe2.py [--expect UART-PROBE2]
+    python3 scripts/mbot_upload.py cyberpi/uart_probe2.py [--expect MARKER]
     (needs dialout: sg dialout -c "..." if your session lacks the group)
+
+Framing constraint: the board only accepts files with size % 80 == 4
+(short tails and non-4B finals are silently rejected and can hang the
+board until power-cycled). The uploader pads with trailing newlines
+(semantically null in Python) to fit — the file on disk is untouched.
 """
 
 import argparse
@@ -202,6 +207,11 @@ def main():
 
     with open(args.file, "rb") as fh:
         code = fh.read()
+    pad = (4 - len(code) % 80) % 80
+    if pad:
+        code = code + b"\n" * pad
+        print(f"padded {pad} trailing newlines for %80==4 framing "
+              f"({len(code)} bytes on the wire)")
     print(f"uploading {args.file} ({len(code)} bytes) to {args.port}")
     s = upload(args.port, code, debug=args.debug)
     if args.expect:
