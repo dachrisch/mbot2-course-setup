@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install package + test deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest
+      - name: Run tests
+        run: python -m pytest tests/ -q
+      - name: Mock-mode smoke (no hardware)
+        run: |
+          CYBERPI_MOCK=1 python -c "
+          from cyberpi_mcp import server
+          import json
+          assert json.loads(server.check_file('cyberpi/welcome_greeter.py'))['has_event_start'] is True
+          assert json.loads(server.upload('cyberpi/welcome_greeter.py'))['mode'] == 'mock'
+          assert len(json.loads(server.list_local())) > 0
+          print('mock smoke OK')
+          "
+      - name: CLI shim imports
+        run: python -c "import ast; ast.parse(open('scripts/mbot_upload.py').read()); ast.parse(open('scripts/list_ports.py').read()); print('scripts parse OK')"

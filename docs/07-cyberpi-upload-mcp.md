@@ -139,6 +139,17 @@ python -m cyberpi_mcp.server
 First release note: with no prior tags, the first release PR cuts `0.1.0`
 from `pyproject.toml`; afterwards versioning is fully automatic.
 
+One-time repo setup for all of this (needs a click in the GitHub UI):
+Settings → Actions → General → Workflow permissions → enable **"Allow
+GitHub Actions to create and approve pull requests"**. Without it both
+release-please and Renovate automerge fail with *"GitHub Actions is not
+permitted to create or approve pull requests"*.
+
+Dependency updates run via Renovate (`renovate.json`, same pattern as the
+sibling projects): non-major, dev-only, and GitHub Actions updates
+automerge as `fix:` commits — which in turn feed the next release-please
+PR. Major bumps arrive as PRs for manual review.
+
 ## Proof log
 
 - 2026-09-19: first upload through the MCP itself —
