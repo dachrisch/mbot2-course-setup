@@ -122,7 +122,7 @@ Every push to `main` runs release-please (`.github/workflows/release-please.yml`
 conventional commits (`feat:`/`fix:`/…) since the last release accumulate
 into a **release PR** (`chore(main): release x.y.z`) that bumps the version
 in `pyproject.toml` and updates the changelog. Merging that PR tags
-`cyberpi-upload-mcp-vx.y.z` and publishes a GitHub Release — so keep commit
+`vx.y.z` and publishes a GitHub Release — so keep commit
 messages conventional (`feat:`, `fix:`, `docs:` …), this repo already does.
 
 Publishing a release triggers `.github/workflows/release-artifacts.yml`,
@@ -130,11 +130,23 @@ which builds the sdist + wheel (`python -m build`) and attaches
 `dist/*` to the release. Install a pinned release anywhere without git:
 
 ```bash
-pip install https://github.com/dachrisch/mbot2-course-setup/releases/download/cyberpi-upload-mcp-v0.1.0/cyberpi_upload_mcp-0.1.0-py3-none-any.whl
+pip install https://github.com/dachrisch/mbot2-course-setup/releases/download/v0.1.0/cyberpi_upload_mcp-0.1.0-py3-none-any.whl
 # (replace the version/tag with the latest release)
 export CYBERPI_PORT=/dev/ttyUSB0   # COM6 / /dev/tty.wchusbserial* elsewhere
 python -m cyberpi_mcp.server
 ```
+
+Tags are plain `vX.Y.Z` (single-package mode, no component prefix).
+
+Known GitHub gotcha, already bitten once (v0.1.0 shipped with zero
+assets and had to be backfilled by hand): release-please authenticates
+with `GITHUB_TOKEN`, and GitHub suppresses downstream workflow runs for
+`GITHUB_TOKEN`-triggered events — so `release: published` never fires
+`release-artifacts`. One-time fix: create a fine-grained PAT (this repo,
+Contents + Pull requests read/write), store it as the
+`RELEASE_PLEASE_TOKEN` secret, and set `token: ${{ secrets.RELEASE_PLEASE_TOKEN }}`
+on the release-please step. PAT-created releases trigger downstream
+workflows normally.
 
 First release note: with no prior tags, the first release PR cuts `0.1.0`
 from `pyproject.toml`; afterwards versioning is fully automatic.

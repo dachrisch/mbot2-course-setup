@@ -11,13 +11,13 @@
       "semanticCommitType": "fix"
     },
     {
-      "description": "Automerge dev dependencies",
+      "description": "Automerge all dev dependency updates",
       "matchDepTypes": ["devDependencies"],
       "automerge": true,
       "semanticCommitType": "fix"
     },
     {
-      "description": "Automerge GitHub Actions",
+      "description": "Automerge all GitHub Actions updates",
       "matchManagers": ["github-actions"],
       "automerge": true,
       "semanticCommitType": "fix"
