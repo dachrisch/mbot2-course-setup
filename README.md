@@ -1,8 +1,8 @@
-# mbot2-mcp — CyberPi welcome greeter
+# mbot2-mcp — CyberPi welcome greeter + upload MCP
 
 `cyberpi/welcome_greeter.py` is a standalone MicroPython program for the
 CyberPi (mBot2's brain board). It plays a greeting once at boot — no PC,
-no serial link, no MCP server involved:
+no serial link involved at runtime:
 
 1. **Speak & greet** (~2s) — cyan LED ring, "Hello!" on screen, plays the
    built-in `"hello"` audio preset (`cyberpi.audio.play_until`).
@@ -14,15 +14,33 @@ no serial link, no MCP server involved:
 Confirmed working on real hardware 2026-09-06. The repo name is a
 holdover: it started as a PC-side MCP server that remote-controlled an
 mBot2 over serial (opencode → tools → USB/serial → a bridge script on
-the CyberPi). That server, its bridge script, and everything PC-side
-have been removed — this is now a pure on-device program. See
+the CyberPi). That live-control server and its bridge script were removed
+— the greeter is a pure on-device program, and since 2026-09-19 the repo
+has a new **upload-only** MCP (`cyberpi-upload`: `check_file` /
+`list_local` / `upload` / `listen` over USB serial, no browser — see
+`src/cyberpi_mcp/README.md` and `docs/07-cyberpi-upload-mcp.md`). See
 `docs/superpowers/specs/2026-09-06-cyberpi-welcome-greeter-design.md`
 for the design behind the pivot.
 
+## Status (2026-09-19)
+
+- Board currently runs `cyberpi/red_test.py` (red LED ring + "RED test"),
+  uploaded through the MCP itself — all 19 frames acked first try, red
+  confirmed physically. Re-upload the greeter whenever the demo is next.
+- Upload path order of preference: MCP (`upload` tool / `opencode`)
+  → CLI (`scripts/mbot_upload.py`) → browser skill (`upload-cyberpi`,
+  fallback only).
+- Known: USB stdout is silent on this board (`repl_enable=False` lead),
+  so wire markers are best-effort — physical confirmation is the verdict.
+
 ## Uploading it
 
-Get `cyberpi/welcome_greeter.py` onto the board as `main.py`:
+Get a `cyberpi/*.py` file onto the board as `main.py`:
 
+- **Via the MCP** (preferred): `cyberpi-upload` tools — see
+  `src/cyberpi_mcp/README.md`, rollout in `docs/07-cyberpi-upload-mcp.md`.
+- **Via the CLI**: no browser/mLink —
+  `sg dialout -c "python3 scripts/mbot_upload.py cyberpi/<file>.py"`.
 - **Manually**: <https://ide.mblock.cc/> or <https://python.mblock.cc/> →
   connect the CyberPi (USB via mLink, or Bluetooth — see below) →
   switch to Upload mode → paste the file's contents in as `main.py` →

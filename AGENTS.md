@@ -9,7 +9,14 @@ on-device.
 
 - `cyberpi/welcome_greeter.py` — the greeter itself: speak & greet → dance →
   end-text, run once from `@event.start`. Uploaded as the CyberPi's
-  `main.py` via mBlock; not deployed from this repo.
+  `main.py` via the `cyberpi-upload` MCP / `scripts/mbot_upload.py`
+  (browser skill is fallback-only); not deployed from this repo.
+  NOTE (2026-09-19): the board currently runs `cyberpi/red_test.py`
+  (MCP upload proof) — re-upload the greeter for the next demo.
+- `src/cyberpi_mcp/` — upload-only MCP server (`protocol.py` framing
+  single source of truth, `config.py` env, `server.py` 4 tools) +
+  `README.md`; `tests/test_cyberpi_mcp.py` (11 tests); `pyproject.toml`;
+  `opencode-mcp.example.json`. Rollout: `docs/07-cyberpi-upload-mcp.md`.
 - `docs/05-cyberpi-mbot2-api-reference.md` — confirmed `cyberpi`/`mbot2`/
   `mbuild` API calls (LED, audio, display, movement, sensors); consult
   before guessing a signature.
