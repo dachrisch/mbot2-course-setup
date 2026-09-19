@@ -14,14 +14,17 @@ import os
 import time
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP
+try:  # mcp 2.x: FastMCP renamed to MCPServer
+    from mcp.server.mcpserver import MCPServer as _Server
+except ImportError:  # mcp 1.x
+    from mcp.server.fastmcp import FastMCP as _Server
 
 from . import config
 from . import protocol
 
 log = logging.getLogger("cyberpi-upload")
 
-mcp = FastMCP("cyberpi-upload")
+mcp = _Server("cyberpi-upload")
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
