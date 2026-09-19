@@ -9,6 +9,11 @@ dependencies = [
   "pyserial>=3.5",
 ]
 
+[project.optional-dependencies]
+dev = [
+  "pytest",
+]
+
 [project.scripts]
 cyberpi-upload = "cyberpi_mcp.server:main"
 
