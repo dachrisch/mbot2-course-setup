@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "cyberpi-upload": {
+      "type": "local",
+      "command": ["python", "-m", "cyberpi_mcp.server"],
+      "enabled": true,
+      "environment": {
+        "CYBERPI_PORT": "/dev/ttyUSB0"
+      }
+    }
+  }
+}

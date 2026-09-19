@@ -1,5 +1,10 @@
 # opencode wiring + live calibration
 
+> Historical reference for the removed `mbot2-mcp` live-control server
+> (`drive`/`ultrasonic`/… over plain-text stdin — deleted in `726e12e`,
+> not revived: USB stdin is dead, BT is BLE-only). For the current
+> upload-only server see `docs/07-cyberpi-upload-mcp.md`.
+
 ## 1. Install the server
 
 ```bash

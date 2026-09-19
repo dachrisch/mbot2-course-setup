@@ -1,5 +1,10 @@
 # Bridge upload — CyberPi via Chrome + mLink
 
+> Superseded for uploads by `scripts/mbot_upload.py` / the
+> `cyberpi-upload` MCP (`docs/07-cyberpi-upload-mcp.md`), which speak the
+> decoded protocol in `docs/06-usb-upload-protocol.md` over raw serial
+> with no browser. Kept for the manual connect/Upload-mode steps.
+
 Prerequisites: `01-linux-setup.md` done (mLink running, user in `dialout`,
 bot port known — here `/dev/ttyUSB0`).
 

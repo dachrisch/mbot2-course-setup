@@ -60,6 +60,12 @@ hangs) — see `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md`.
   `scripts/mbot_upload.py`, which uploads any `size % 80 == 4` file over
   raw serial with no browser/mLink:
   `sg dialout -c "python3 scripts/mbot_upload.py cyberpi/<file>.py"`
+- `docs/07-cyberpi-upload-mcp.md` — the `cyberpi-upload` MCP server
+  (upload-only tools over the same protocol, `pip install -e .` +
+  `CYBERPI_PORT`/`CYBERPI_MOCK`); `opencode-mcp.example.json` has the
+  wiring. Start here for rollout: per-OS prerequisites
+  (Linux/macOS/Windows), opencode + Claude Code config, fleet, and the
+  5-minute hardware checklist.
 - `history/2026-09-08_browser-free-upload.md` — how the direct
   programming path was re-iterated (USB stdin dead, UART alive,
   framing cracked, red LED + hi/cheers demos)
