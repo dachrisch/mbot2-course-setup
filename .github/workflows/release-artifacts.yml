@@ -22,6 +22,6 @@ jobs:
           python -m build
           ls -l dist/
       - name: Attach to the release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/*
