@@ -60,4 +60,4 @@ Env knobs: `CYBERPI_PORT` (single board), `CYBERPI_BOTS="A=/dev/ttyUSB0,B=/dev/t
 - Physical confirmation (LED/screen) is the success signal, not logs.
 
 Full rollout guide (per-OS prerequisites, fleet, hardware checklist,
-proof log): `docs/07-cyberpi-upload-mcp.md`.
+releases, proof log): `docs/07-cyberpi-upload-mcp.md`.

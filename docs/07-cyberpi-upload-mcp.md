@@ -116,6 +116,29 @@ The only trustworthy success signal is the user physically confirming the
 board's behavior. The `upload-cyberpi` skill (browser path) remains as a
 fallback and its physical-check rule applies here too.
 
+## Releases (release-please + artifacts)
+
+Every push to `main` runs release-please (`.github/workflows/release-please.yml`):
+conventional commits (`feat:`/`fix:`/…) since the last release accumulate
+into a **release PR** (`chore(main): release x.y.z`) that bumps the version
+in `pyproject.toml` and updates the changelog. Merging that PR tags
+`cyberpi-upload-mcp-vx.y.z` and publishes a GitHub Release — so keep commit
+messages conventional (`feat:`, `fix:`, `docs:` …), this repo already does.
+
+Publishing a release triggers `.github/workflows/release-artifacts.yml`,
+which builds the sdist + wheel (`python -m build`) and attaches
+`dist/*` to the release. Install a pinned release anywhere without git:
+
+```bash
+pip install https://github.com/dachrisch/mbot2-course-setup/releases/download/cyberpi-upload-mcp-v0.1.0/cyberpi_upload_mcp-0.1.0-py3-none-any.whl
+# (replace the version/tag with the latest release)
+export CYBERPI_PORT=/dev/ttyUSB0   # COM6 / /dev/tty.wchusbserial* elsewhere
+python -m cyberpi_mcp.server
+```
+
+First release note: with no prior tags, the first release PR cuts `0.1.0`
+from `pyproject.toml`; afterwards versioning is fully automatic.
+
 ## Proof log
 
 - 2026-09-19: first upload through the MCP itself —
