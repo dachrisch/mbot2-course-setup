@@ -1,6 +1,6 @@
 [project]
 name = "cyberpi-upload-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Upload-only MCP server for the CyberPi (mBot2 brain) over USB serial — no browser, no mLink."
 readme = "README.md"
 requires-python = ">=3.10"

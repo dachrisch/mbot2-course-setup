@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/dachrisch/mbot2-course-setup/compare/v0.1.0...v0.1.1) (2026-09-19)
+
+
+### Documentation
+
+* correct release tag scheme, document PAT gotcha for artifacts ([c5813c6](https://github.com/dachrisch/mbot2-course-setup/commit/c5813c62cd5fbff8ac309c9c7ccb75fcab2d0af2))
+
 ## 0.1.0 (2026-09-19)
 
 
