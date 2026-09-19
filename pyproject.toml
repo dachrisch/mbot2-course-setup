@@ -5,7 +5,7 @@ description = "Upload-only MCP server for the CyberPi (mBot2 brain) over USB ser
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "mcp>=1.0,<2",
+  "mcp>=2.2,<3",
   "pyserial>=3.5",
 ]
 
