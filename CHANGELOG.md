@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.2](https://github.com/dachrisch/mbot2-course-setup/compare/v0.1.1...v0.1.2) (2026-10-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency mcp to v2 ([1a22c71](https://github.com/dachrisch/mbot2-course-setup/commit/1a22c71c11c95581d2e56f2915bddb2030629d25))
+* **deps:** update dependency python to 3.15 ([#11](https://github.com/dachrisch/mbot2-course-setup/issues/11)) ([eede807](https://github.com/dachrisch/mbot2-course-setup/commit/eede80790ac4b004bbd8bc6ad2f6004a9925c3dd))
+* support mcp v2 MCPServer import with v1 fallback ([6fc2138](https://github.com/dachrisch/mbot2-course-setup/commit/6fc213827f16811e46ed34f512d56864b33ae869))
+
 ## [0.1.1](https://github.com/dachrisch/mbot2-course-setup/compare/v0.1.0...v0.1.1) (2026-09-19)
 
 
