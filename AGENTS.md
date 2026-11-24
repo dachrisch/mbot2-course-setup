@@ -1,95 +1,75 @@
 # AGENTS.md — mbot2-mcp
 
-Standalone MicroPython program for the CyberPi (mBot2's brain board):
-`cyberpi/welcome_greeter.py` plays a speak → dance → end-text greeting once
-at boot. No PC, no serial link, no MCP server involved — everything runs
-on-device.
+CyberPi (mBot2's brain board) course setup: an on-device MicroPython greeter
+in `cyberpi/`, plus a browser-free, upload-only MCP server in `src/cyberpi_mcp/`
+that puts those files on the board over USB serial. The repo name is a holdover
+from a removed live-control serial bridge; see `README.md`.
 
-## Layout
+## Component guides
 
-- `cyberpi/welcome_greeter.py` — the greeter itself: speak & greet → dance →
-  end-text, run once from `@event.start`. Uploaded as the CyberPi's
-  `main.py` via the `cyberpi-upload` MCP / `scripts/mbot_upload.py`
-  (browser skill is fallback-only); not deployed from this repo.
-  NOTE (2026-09-19): the board currently runs `cyberpi/red_test.py`
-  (MCP upload proof) — re-upload the greeter for the next demo.
-- `src/cyberpi_mcp/` — upload-only MCP server (`protocol.py` framing
-  single source of truth, `config.py` env, `server.py` 4 tools) +
-  `README.md`; `tests/test_cyberpi_mcp.py` (11 tests); `pyproject.toml`;
-  `opencode-mcp.example.json`. Rollout: `docs/07-cyberpi-upload-mcp.md`.
+- [cyberpi/AGENTS.md](cyberpi/AGENTS.md) — on-device MicroPython programs:
+  `@event.start`, top-level imports, marker heartbeats, upload as `main.py`.
+- [src/AGENTS.md](src/AGENTS.md) — upload MCP server, framing protocol,
+  environment config, mock mode.
+- [tests/AGENTS.md](tests/AGENTS.md) — the hardware-free pytest suite.
+
+## Repo-wide essentials
+
+- `pyproject.toml` — package `cyberpi-upload-mcp`, Python >= 3.10, deps `mcp`
+  and `pyserial`, console script `cyberpi-upload`, pytest `testpaths = ["tests"]`.
+- `scripts/mbot_upload.py` — thin CLI over the protocol; `scripts/list_ports.py`
+  — enumerate serial ports by unplug/plug diff; `opencode-mcp.example.json` —
+  MCP wiring.
 - `docs/05-cyberpi-mbot2-api-reference.md` — confirmed `cyberpi`/`mbot2`/
-  `mbuild` API calls (LED, audio, display, movement, sensors); consult
-  before guessing a signature.
-- `docs/01-linux-setup.md` — mLink/USB setup; still accurate, consult
-  before re-diagnosing.
-- `docs/04-troubleshooting.md` — connection/upload failure log; the
-  mLink/dialout/USB connectivity rows are still accurate, but several rows
-  (the `PING`/bridge-upload row, the `ModuleNotFoundError: mcp...`/
-  `mbot2_mcp` rows, the motor-polarity `DRIVE`-handler row, and the sensor
-  `index=2` row) and the raw-port diagnosis snippet at the bottom are
-  written for the now-deleted MCP/bridge package — ignore those.
+  `mbuild` calls; consult before guessing a signature. `docs/06-usb-upload-protocol.md`
+  — framing; `docs/07-cyberpi-upload-mcp.md` — rollout. `docs/01-linux-setup.md`
+  (mLink/USB setup) is still accurate; in `docs/04-troubleshooting.md` only the
+  mLink/dialout/USB connectivity rows are current — rows about the deleted
+  bridge/MCP package are stale, ignore them.
 - `docs/02-bridge-upload.md`, `docs/03-opencode-mcp.md` — written for the
-  now-deleted PC-side bridge/MCP server; stale in places (rewriting them is
-  out of scope here — see README), but `02`'s connect/Upload-mode steps
-  still apply to uploading any `.py` file, including this one.
-- `.claude/skills/upload-cyberpi/SKILL.md` (Claude) /
-  `.opencode/skills/upload-cyberpi/SKILL.md` (opencode, chrome-devtools) —
-  browser-automation procedure for uploading through the mBlock web IDE.
+  deleted PC-side bridge; stale, but `02`'s connect/Upload-mode steps still
+  apply to any `.py` upload.
+- `.claude/skills/upload-cyberpi/SKILL.md` and
+  `.opencode/skills/upload-cyberpi/SKILL.md` — browser-IDE upload fallback.
+  Repo-specific reusable workflows belong in those skill dirs; don't invent
+  new ones here.
 - `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md` — the incident
-  behind the `@event.start` constraint below.
+  behind the `@event.start` constraint; `history/2026-09-08_browser-free-upload.md`
+  — how the browser-free path was built.
 
 ## Hard constraints (violations broke this repo before)
 
 - **Never suggest Arduino flashing for the CyberPi** — it wipes CyberOS.
-  `welcome_greeter.py` is a MicroPython `main.py` upload, which coexists
-  with CyberOS.
-- **No test suite exists.** "Testing" means uploading via the
-  `upload-cyberpi` skill and having the user physically confirm the
-  board's behavior — see Commands below.
-- **`cyberpi/welcome_greeter.py`'s entry point must stay registered via
-  `@event.start` (from `import event`), never a bare
-  `if __name__ == "__main__"` block.** Confirmed 2026-09-06: a
-  non-`@event.start` entry point boots the CyberPi to the Makeblock logo
-  then hangs/goes dark, requiring a firmware reinstall — reproduced twice,
-  independent of what code was run (a full serial-bridge script and a
-  trivial one-liner). Device APIs must also stay top-level imports
-  (`import mbot2`, `import mbuild`), not `cyberpi.mbot2` /
-  `cyberpi.ultrasonic2` attribute access — see
-  `history/2026-09-06_mlink-fix-and-bridge-upload-brick.md` for the full
-  incident. Re-test any structural change with a small marker-bearing
-  snippet before trusting the full greeter again.
+  A MicroPython `main.py` upload coexists with CyberOS.
+- **On-device entry points must stay registered via `@event.start`.** Details
+  and the failure mode are in [cyberpi/AGENTS.md](cyberpi/AGENTS.md).
+- **No automated green light:** physical LED/screen confirmation (or a serial
+  marker where readable) is the verdict. USB stdout is silent on this board, so
+  markers are best-effort. Don't call an upload good until the user confirms.
 
-## Commands
-
-No install step and no test suite — this is a single MicroPython file
-uploaded straight to the board.
+## Verify and upload
 
 ```bash
-wc -c cyberpi/welcome_greeter.py   # byte length; sanity-check the editor matches before uploading
+python3 -m pytest tests/ -q      # 11 hardware-free tests; see tests/AGENTS.md
+wc -c cyberpi/welcome_greeter.py # byte-length sanity check before an upload
 ```
 
-Upload and verify via the `upload-cyberpi` skill
-(`.claude/skills/upload-cyberpi/SKILL.md` on Claude, or
-`.opencode/skills/upload-cyberpi/SKILL.md` on opencode, or
-`/upload-cyberpi cyberpi/welcome_greeter.py`) — it drives the mBlock web
-IDE, checks the editor content byte-for-byte against the local file before
-uploading, and ends by asking the user to physically confirm the board's
-boot behavior (LED ring + "Hello!" → dance → "Welcome to class!"). There is
-no automated success signal; don't declare an upload good until the user
-confirms.
+Upload order of preference: MCP `upload` tool → CLI
+(`sg dialout -c "python3 scripts/mbot_upload.py cyberpi/<file>.py"`) →
+browser skill fallback. See [src/AGENTS.md](src/AGENTS.md) and
+[cyberpi/AGENTS.md](cyberpi/AGENTS.md). Note the board currently runs
+`cyberpi/red_test.py`; re-upload the greeter for the next demo.
 
-## Serial gotchas (all observed 2026-09-06, details in `docs/04-troubleshooting.md`)
+## Serial gotchas (observed 2026-09-06; details in `docs/04-troubleshooting.md`)
 
-- `Permission denied` on `/dev/ttyUSB0` → user missing the `dialout` group.
-  Fix with `sudo usermod -aG dialout $USER`, then log out/in — needed by
-  mLink itself, not any code in this repo.
-- A device can show as connected even with the bot's power switch OFF —
-  the CH340 USB-serial chip enumerates regardless of power state. If
-  mBlock sees a device but nothing responds, check the physical switch
-  (sensor LEDs lit = powered).
-- Only one thing can hold the port at a time: close any other mBlock
-  browser tab / mLink session before opening a new one
-  (`Device or resource busy` if you don't).
+- `Permission denied` on `/dev/ttyUSB0` → user missing `dialout`. Fix with
+  `sudo usermod -aG dialout $USER`, then log out/in — needed by mLink itself,
+  not by repo code.
+- A device can show connected with the bot powered OFF (the CH340 enumerates
+  regardless of power). If mBlock sees it but nothing responds, check the
+  physical switch (sensor LEDs lit = powered).
+- Only one process can hold the port: close other mBlock tabs / mLink sessions
+  first (`Device or resource busy`).
 - mLink's `.deb` must be downloaded **in a browser** from
-  `https://s.mblock.cc/download/mlink-deb`; `curl` returns a JS landing
-  page, not the package.
+  `https://s.mblock.cc/download/mlink-deb`; `curl` returns a JS landing page,
+  not the package.
